@@ -1,0 +1,98 @@
+﻿@inject Cart  cart
+
+@*<h1>Checkout</h1>
+<hr/>*@
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <h1>Secure Checkout</h1>
+    </div> 
+</div>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <hr/>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-5 col-md-6 col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <input class="form-control" placeholder="Card Number" />
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-6">
+                    </div>
+                    <div class="col-3">
+                        <input class="form-control" placeholder="MM/YY" />
+                    </div>
+                    <div class="col-3">
+                        <input class="form-control" placeholder="CVV" />
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-12">
+                        <input class="form-control" placeholder="Card Holder" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7  col-md-6 col-sm-12">
+        <div class="row">
+            <div class="col-6">
+            </div>
+            <div class="col-6">
+                <h2>Total</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+            </div>
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Price exc. Vat</h5>
+                    </div>
+                    <div class="col-6">
+                        R @cart.GetShoppingCartWithoutVat().ToString().Substring(0, cart.GetShoppingCartWithoutVat().ToString().Length - 4)
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Vat</h5>
+                    </div>
+                    <div class="col-6">
+                        R @cart.GetShoppingCartVat().ToString().Substring(0, cart.GetShoppingCartVat().ToString().Length - 4)
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-6">
+                        <h5>Total</h5>
+                    </div>
+                    <div class="col-6">
+                        R @cart.GetShoppingCartTotal().ToString().Substring(0, cart.GetShoppingCartTotal().ToString().Length - 2)
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+            </div>
+            <div class="col-6">
+                <a class="btn btn-success btn-lg" asp-controller="Home" asp-action="Processed">Proceed</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+}
+
+

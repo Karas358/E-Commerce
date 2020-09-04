@@ -1,0 +1,68 @@
+﻿@inject WebDevelopment_Assignment2.App_Data.IShoppingRepo shoppingRepo
+@inject WebDevelopment_Assignment2.Models.Cart cart;
+
+
+@if (cart.CountAllCartItems() > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Product
+                </th>
+                <th>
+                    Qty
+                </th>
+                <th>
+                    Price
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in cart.GetAllCartItems())
+            {
+                <tr>
+                    <td>
+                        @item.Product.ProductName
+                    </td>
+                    <td>
+                        @item.Qty
+                    </td>
+                    <td>
+                        R @item.Product.Price
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td>
+                </td>
+                <td>
+                </td>
+                <th>
+                    Total
+                </th>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                    R @cart.GetShoppingCartTotal().ToString().Substring(0, cart.GetShoppingCartTotal().ToString().Length - 2)
+                    <hr />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+   <h3>No Products Added</h3>
+
+}
+
+
+
+@code {
+
+}

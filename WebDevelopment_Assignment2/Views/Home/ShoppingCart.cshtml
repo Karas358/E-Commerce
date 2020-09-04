@@ -1,0 +1,32 @@
+﻿@model IEnumerable<WebDevelopment_Assignment2.Models.CartItem>
+@inject Cart cart
+@*@{
+        ViewData["Title"] = "ShoppingCart";
+    }
+*@
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1>Shopping Cart</h1>
+    </div>
+</div>
+<hr />
+
+@(await Html.RenderComponentAsync<WebDevelopment_Assignment2.Components.CartItems>(RenderMode.ServerPrerendered))
+
+@{
+    if (cart.CountAllCartItems() > 0)
+    {
+
+        <div class="row">
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4"></div>
+            <div class="col-lg-4">
+                <a class="btn btn-success" asp-controller="Home" asp-action="Checkout">Checkout</a>
+            </div>
+        </div>
+    }
+}
+
+
+<script src="_framework/blazor.server.js"></script>
