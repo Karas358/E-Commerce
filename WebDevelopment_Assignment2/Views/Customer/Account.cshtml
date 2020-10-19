@@ -3,23 +3,19 @@
 @inject WebDevelopment_Assignment2.App_Data.IUserRepo UserRepo
 
 
-@{ 
-    System.Security.Claims.ClaimsIdentity identityUser = UserRepo.GetUserClaimsIdentity();
-    string res = identityUser.Name;
-}
+
 <div class="row">
     <div class="col-lg-9">
-        <h3>@res</h3>
+        <h1>Order Management</h1>
     </div>
     <div class="col-lg-3">
-        <a class="btn btn-warning" asp-controller="Home" asp-action="Logout">Logout</a>
     </div>
 </div>
-
-
+<h4>Previous Orders</h4>
 <hr />
 @{
-
+    System.Security.Claims.ClaimsIdentity identityUser = UserRepo.GetUserClaimsIdentity();
+    string res = identityUser.Name;
     if (shoppingepo.getAllOrders(res) != null)
     {
         <div class="row">
@@ -60,7 +56,13 @@
             </div>
         </div>
     }
+    else
+    {
+        <div class="row">
+            <div class="col-12">
+                <h1 class="display-1">You still need to order first.</h1>
+            </div>
+        </div>
+    }
 }
 
-@{
-}

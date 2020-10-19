@@ -10,5 +10,6 @@ namespace WebDevelopment_Assignment2.App_Data
     public interface IUserRepo
     {
         ClaimsIdentity GetUserClaimsIdentity();
+        bool isUserAdmin();
     }
 }

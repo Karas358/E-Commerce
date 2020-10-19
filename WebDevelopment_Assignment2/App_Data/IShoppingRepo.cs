@@ -14,6 +14,8 @@ namespace WebDevelopment_Assignment2.App_Data
         void createProduct(Product product);
         IEnumerable<Product> getAllProducts();
         Product getProductById(int id);
+        void removeProduct(Product product);
+        void editProduct(Product product);
 
         //Cart
         void createCart(Cart cart);

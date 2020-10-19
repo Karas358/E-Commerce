@@ -1,0 +1,95 @@
+﻿@inject WebDevelopment_Assignment2.App_Data.IUserRepo UserRepo
+@inject Cart cart
+
+@{
+    System.Security.Claims.ClaimsIdentity identityUser = UserRepo.GetUserClaimsIdentity();
+    string res = identityUser.Name;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebDevelopment_Assignment2</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/sidebar/sidebar.css" />
+    <base href="~/" />
+</head>
+<body>
+
+    <div class="d-flex" id="wrapper">
+
+        <!-- Sidebar -->
+        <div class="bg-div border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading">Online Shopping </div>
+            <div class="list-group list-group-flush">
+                <a class="list-group-item list-group-item-action bg-div">Dashboard</a>
+                <a class="list-group-item list-group-item-action bg-div" asp-controller="Admin" asp-action="ProductManagement">Products</a>
+                <a class="list-group-item list-group-item-action bg-div">Clients</a>
+                <a class="list-group-item list-group-item-action bg-div">Users</a>
+                <a class="list-group-item list-group-item-action bg-div">Logout</a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+
+            <nav class="navbar navbar-expand-lg navbar-dark bg-navbar border-bottom">
+                <button class="btn btn-sm btn-dark" id="menu-toggle"> <span class="navbar-toggler-icon"></span></button>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        
+                        <li class="nav-item active">
+                            <div class="dropleft">
+                                <a class="nav-link dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown">
+                                    <span class="fa fa-user-o"></span>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Profile</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                 Hello, @res
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="container-fluid">
+                <main role="main" class="p-2">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <footer class="border-top footer text-muted bg-navbar">
+        <div class="container">
+            &copy; 2020 - OnlineShop - <a asp-area="" asp-controller="Home" asp-action="About">About Us</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+    <!-- Menu Toggle Script -->
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -33,6 +34,17 @@ namespace WebDevelopment_Assignment2
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                services.AddDbContext<ShoppingContext>(opt => opt.UseSqlServer(
+                    Configuration.GetConnectionString("ConnectionStringMain")
+                ));
+            }
+            else if(!RuntimeInformation.IsOSPlatform(OSPlatform.Linux) && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                services.AddDbContext<ShoppingContext>(options =>
+                    options.UseSqlite(Configuration.GetConnectionString("ConnectionStringMainSqlite")));
+            }
             services.AddHttpContextAccessor();
             services.AddTransient<IUserRepo, UserRepo>();
             services.AddTransient<Order>();
@@ -50,9 +62,6 @@ namespace WebDevelopment_Assignment2
                 })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
-            services.AddDbContext<ShoppingContext>(opt => opt.UseSqlServer(
-                Configuration.GetConnectionString("ConnectionStringMain")
-            ));
             services.AddIdentity<IdentityUser, IdentityRole>(config => {
                 config.Password.RequiredLength = 4;
                 config.Password.RequireDigit = false;
@@ -62,7 +71,6 @@ namespace WebDevelopment_Assignment2
             })
               .AddEntityFrameworkStores<ShoppingContext>()
               .AddDefaultTokenProviders();
-
             services.ConfigureApplicationCookie(config => {
                 config.Cookie.Name = "Shop.Cookie";
                 config.LoginPath = "/Home/Login";
@@ -112,6 +120,7 @@ namespace WebDevelopment_Assignment2
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapBlazorHub();
             });
+            //Seeding Admin User On First Run
             SeedAdmin.SeedUser(app);
         }
     }

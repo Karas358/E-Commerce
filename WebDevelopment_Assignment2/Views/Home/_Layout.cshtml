@@ -1,13 +1,20 @@
-﻿<!DOCTYPE html>
+﻿@inject WebDevelopment_Assignment2.App_Data.IUserRepo UserRepo
+@inject Cart cart
+
+@{
+    System.Security.Claims.ClaimsIdentity identityUser = UserRepo.GetUserClaimsIdentity();
+    string res = identityUser.Name;
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - WebDevelopment_Assignment2</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <base href="~/"/>
+    <base href="~/" />
 </head>
 <body>
     <header>
@@ -33,16 +40,47 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a>
                         </li>
-                        
+
                         <li class="nav-item align-self-end">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ShoppingCart">
-                                <span class="fa fa-shopping-cart"></span>
+                                @{
+                                    if (cart.CountAllCartItems() > 0)
+                                    {
+                                        <div class="badge badge-info">@cart.CountAllCartItems() <span class="fa fa-shopping-cart"></span></div>
+                                    }
+                                    else
+                                    {
+                                        <span class="fa fa-shopping-cart"></span>
+                                    }
+                                }
+
+
                             </a>
                         </li>
+
                         <li class="nav-item align-self-end">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">
-                                <span class="fa fa-user-o"></span>
-                            </a>
+                            <div class="dropdown">
+                                <a class="nav-link text-dark dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown">
+                                    <span class="fa fa-user-o"></span>
+                                </a>
+                                @{
+                                    if (res == null)
+                                    {
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Login">Login | Register</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#">@res</a>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Customer" asp-action="Account">Account</a>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
+                                        </div>
+                                    }
+                                }
+
+                            </div>
                         </li>
 
                     </ul>

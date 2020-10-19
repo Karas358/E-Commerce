@@ -57,6 +57,7 @@ namespace WebDevelopment_Assignment2.Controllers
         {
             return View();
         }
+
         public ViewResult ShoppingCart()
         {
             IEnumerable<CartItem> cartItems = _cart.GetAllCartItems().ToList();
@@ -93,18 +94,13 @@ namespace WebDevelopment_Assignment2.Controllers
         {
             return View();
         }
-        [Authorize(Roles = "Admin")]
-        public IActionResult AdminPanel()
-        {
-            return View();
-        }
-        [HttpPost]
-        public ActionResult createProduct(Product product)
-        {
-            _shoppingRepo.createProduct(product);
-            _shoppingRepo.saveChanges();
-            return RedirectToAction("Index");
-        }
+        //[Authorize(Roles = "Admin")]
+        //public IActionResult AdminPanel()
+        //{
+        //    return View();
+        //}
+        
+        
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
@@ -117,10 +113,10 @@ namespace WebDevelopment_Assignment2.Controllers
                     var claims =await _userManager.GetClaimsAsync(user);
                     var roleClaim = claims[0].Value;
                     if (roleClaim == "Admin") { 
-                        return RedirectToAction("AdminPanel"); 
+                        return RedirectToAction("ProductManagement", "Admin"); 
                     }
                     if (roleClaim == "Customer") {
-                        return RedirectToAction("Account"); 
+                        return RedirectToAction("Account","Customer"); 
                     }
                 }
                 
@@ -155,7 +151,7 @@ namespace WebDevelopment_Assignment2.Controllers
                 if (signIn.Succeeded)
                 {
                     if(await _userManager.IsInRoleAsync(user, "Admin")) return RedirectToAction("AdminPanel");
-                    if(await _userManager.IsInRoleAsync(user, "Customer")) return RedirectToAction("Account"); 
+                    if(await _userManager.IsInRoleAsync(user, "Customer")) return RedirectToAction("Account","Customer"); 
                     
                 }
             }

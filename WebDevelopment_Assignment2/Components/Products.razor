@@ -1,19 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Forms 
 @using WebDevelopment_Assignment2.Models
 @using WebDevelopment_Assignment2.App_Data
 @inject IShoppingRepo sqlShoppingRepo
 @inject Cart cart
 @inject IUserRepo Userrepo
 
-
-<div class="container">
+@{
+    bool isAdmin = Userrepo.isUserAdmin();
+    
+}
     <div class="row">
         <div class="col-12">
-            <div class="card-columns">
+            <div class="card-columns wrapper">
                 @foreach (var product in sqlShoppingRepo.getAllProducts())
                 {
-                    <div class="card">
-                        <div class="card-img img-fluid" style="background-image: url('https://user-images.githubusercontent.com/41929050/61567048-13938600-aa33-11e9-9cfd-712191013192.jpeg')">
+                    <div class="card" @onclick="(e => SelectProduct(product.ProductID))" data-toggle="modal" data-target="#productModal">
+                        <div class="card-img img-fluid" style="background-image: url('https://images.unsplash.com/photo-1549298916-b41d501d3772?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60')">
 
                         </div>
                         <div class="card-body">
@@ -28,50 +31,141 @@
                                     <h3>R @product.Price</h3>
                                 </div>
                                 <div class="col-6">
-                                    <button @onclick="(e => SelectProduct(product.ProductID))"
-                                            data-toggle="modal" data-target="#productModal" class="btn btn-sm btn-warning">
-                                        Add To Cart
-                                    </button>
-                                    
-                                        
+                                   
                                 </div>
                             </div>
                         </div>
                     </div>
-                                        }
+                }
             </div>
         </div>
     </div>
-</div>
 
 
 
 @if (selectedProduct != null)
 {
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="productTitle">@selectedProduct.ProductName</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
                 <div class="modal-body">
-                    <div class="card">
-                        <div class="card-img" style="background-image: url('https://user-images.githubusercontent.com/41929050/61567048-13938600-aa33-11e9-9cfd-712191013192.jpeg')">
-
+                    @{
+                    if (isAdmin)
+                    {
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <img class="img-fluid" src="https://images.unsplash.com/photo-1601980648247-0bdb2d1b78a9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" />
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-10"></div>
+                                            <div class="col-2">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-12">
+                                                <h5 class="modal-title" id="productTitle">@selectedProduct.ProductName</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-12">
+                                                <p class="text-muted">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                                    sed do eiusmod tempor incididunt ut labore et dolore
+                                                    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                                                    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                                                    non proident, sunt in culpa qui officia deserunt mollit
+                                                    anim id est laborum.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <EditForm Model="@selectedProduct" OnInvalidSubmit="@(e => editProduct(selectedProduct))">
+                                            <DataAnnotationsValidator />
+                                            @*<ValidationSummary />*@
+                                            <div class="row p-1">
+                                                <div class="col-12">
+                                                    <input class="form-control" @bind-value="@selectedProduct.Price" />
+                                                    <ValidationMessage For=@(() => selectedProduct.Price) class="text-danger" />
+                                                </div>
+                                            </div>
+                                            <div class="row p-1">
+                                                <div class="col-6">
+                                                    <button type="submit" class="btn btn-warning w-100" @onclick="@(e => editProduct(selectedProduct))" data-dismiss="modal">Save</button>
+                                                </div>
+                                                <div class="col-6">
+                                                    <button class="btn btn-warning w-100" @onclick="(e => removeProduct(selectedProduct))" data-dismiss="modal">
+                                                        remove
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </EditForm>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card-body">
-                            <p class="card-text">R @selectedProduct.Price</p>
-                           
-
-                            <button @onclick="(e => AddToCart(selectedProduct.ProductID))" class="btn btn-warning" data-dismiss="modal">Add to Cart</button>
+                    }
+                    else
+                    {
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <img class="img-fluid" src="https://images.unsplash.com/photo-1601980648247-0bdb2d1b78a9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" />
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-10"></div>
+                                            <div class="col-2">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-12">
+                                                <h5 class="display-4" id="productTitle">@selectedProduct.ProductName</h5>
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-12">
+                                                <p class="text-muted">
+                                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                                    sed do eiusmod tempor incididunt ut labore et dolore
+                                                    magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                                                    irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                                                    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                                                    non proident, sunt in culpa qui officia deserunt mollit
+                                                    anim id est laborum.
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-12">
+                                                <h3 class="display-4">R @selectedProduct.Price</h3>
+                                            </div>
+                                        </div>
+                                        <div class="row p-1">
+                                            <div class="col-12">
+                                                <button @onclick="(e => AddToCart(selectedProduct.ProductID))" class="btn btn-warning" data-dismiss="modal">Add to Cart</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    }
+                    }
                 </div>
-                
             </div>
+       
         </div>
     </div>
 }
@@ -91,7 +185,17 @@
         cartItem.Qty = 1;
         cart.AddToCart(cartItem);
     }
+    void removeProduct(Product product)
+    {
+        sqlShoppingRepo.removeProduct(product);
+        sqlShoppingRepo.saveChanges();
+    }
+    void editProduct(Product product)
+    {
+        sqlShoppingRepo.editProduct(product);
+        sqlShoppingRepo.saveChanges();
+    }
 }
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+@*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />*@
 
 

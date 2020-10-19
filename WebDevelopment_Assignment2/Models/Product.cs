@@ -14,6 +14,7 @@ namespace WebDevelopment_Assignment2.Models
         public int ProductID { get; set; }
         [Required]
         public string ProductName { get; set; }
+
         [Required]
         [Column(TypeName="decimal(5,2)")]
         public decimal Price { get; set; }

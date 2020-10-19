@@ -168,3 +168,29 @@ ul {
     background: -moz-linear-gradient(110deg, #252152 60%, #e9a8a6 60%);
     background: linear-gradient(110deg, #252152 60%, #e9a8a6 60%);*/
 }
+.bg-div {
+    background: #ffbb33;
+}
+.wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 15px;
+}
+
+@media screen and (max-width: 720px) {
+    .wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (min-width: 720px) {
+    .wrapper {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (min-width: 800px) {
+    .wrapper {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

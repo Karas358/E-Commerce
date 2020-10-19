@@ -23,5 +23,12 @@ namespace WebDevelopment_Assignment2.App_Data
             return _accessor?.HttpContext.User.Identity as ClaimsIdentity;
 
         }
+
+        public bool isUserAdmin()
+        {
+            return (bool)_accessor?.HttpContext.User.IsInRole("Admin");
+        }
+
+        
     }
 }

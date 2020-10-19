@@ -1,0 +1,27 @@
+﻿@model IEnumerable<WebDevelopment_Assignment2.Models.Product>
+@using WebDevelopment_Assignment2.Components
+
+@{
+    ViewData["Title"] = "Products";
+}
+
+
+<div class="row">
+    <div class="col-lg-9">
+        <h1>Product Management</h1>
+    </div>
+    <div class="col-lg-3">
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-9">
+        <h4>Product</h4>
+    </div>
+    <div class="col-lg-3">
+        <a class="btn btn-warning" asp-controller="Admin" asp-action="AddProduct"><span class="fa fa-plus"></span> New Product</a>
+    </div>
+</div>  
+<hr />
+@(await Html.RenderComponentAsync<Products>(RenderMode.ServerPrerendered))
+<script src="_framework/blazor.server.js"></script>
+
